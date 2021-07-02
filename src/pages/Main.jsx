@@ -6,8 +6,8 @@ import { getTech, addTech, deleteTech } from '../services/api';
 import Form from './Form';
 import {Link} from "react-router-dom"
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
-
 import Loading from './Loading';
+import { Pagination } from './Pagination';
 export const Main =() => {
     const [name, setName] = useState("");
     const [lastname, setLastname] = useState("");
@@ -22,12 +22,20 @@ export const Main =() => {
 
     const [loading, setLoading] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1)
+    const [postsPerPage, setPostsPerPage] = useState(5);
+
     useEffect(() => {
         loadNames()
     }, []);
 
     const loadNames = () => getTech().then((tech)=>setNames(tech.data))
     console.log(names)
+
+    const indexOfLastPage = currentPage * postsPerPage;
+    const IndexOfFirstPage = indexOfLastPage - postsPerPage;
+    const currentPost = names.slice(IndexOfFirstPage, indexOfLastPage)
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -53,6 +61,20 @@ export const Main =() => {
         })
     }
 
+    const handleCancel = (e) => {
+        e.preventDefault()
+        setLoading(true)
+        window.location.reload()
+        setName=("")
+        setLastname=("")
+        setDatebirth=("")
+        setMobile=("")
+        setRue=("")
+        setVille=("")
+        setPays=("")
+        setEmail=("")
+    }
+
     const handleDelete = (id, name) => {
         if(window.confirm("Tu es sur de le supprimer? ")){
             setLoading(true);
@@ -66,15 +88,21 @@ export const Main =() => {
         }
     }
 
+    const paginate = (numberPage)=> {
+        setCurrentPage(numberPage)
+    }
+
     return (
         <>
         {
             loading ? <Loading/> : (
                 <>
                     <div className="container pt-4">
+                        
                         <div className="card mb-4 p-4">
                             <Form
                                 handleSubmit={handleSubmit}
+                                handleCancel={handleCancel}
                                 name={name}
                                 lastname={lastname}
                                 dateBirth={dateBirth}
@@ -95,11 +123,30 @@ export const Main =() => {
                             />
                         </div>
                         <div className="card p-3">
-                            
-                            <h4>List des techniciens</h4>
+                            <div className="d-flex tableHead">
+                                <div className="d-flex">
+                                    <h4>List des techniciens</h4>
+                                    <select className="form-control ml-2 input input-sm" style={{width:"75px"}} name="" id="" onChange={(e)=>setPostsPerPage(e.target.value)}>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="75">74</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <Pagination 
+                                        postPerPage={postsPerPage} 
+                                        totalePosts={names.length}
+                                        paginate={paginate}
+                                    />
+                                </div>    
+                            </div>                            
                             <div className="table-responsive">
                                 <table className="table table-hover">
                                     <caption>Liste des techniciens {names.length >= 10 ? names.length : "0"+ names.length}</caption>
+                                    
                                     <thead>
                                         <tr className="tHeader">
                                             <th scope="col">#</th>
@@ -114,7 +161,7 @@ export const Main =() => {
                                     </thead>
                                     <tbody>
                                     {
-                                            names && names.map((element)=>(
+                                            currentPost && currentPost.map((element)=>(
                                                 <tr key={element.id}>
                                                     <td>{element.id}</td>
                                                     <td>{element.name}</td>
@@ -143,14 +190,15 @@ export const Main =() => {
                                         }
                                         
                                     </tbody>
+                                    
                                 </table>
+                                
                             </div>
                         </div>
                     </div>
                 </>
                 )
             }
-
         </>
     )
 }

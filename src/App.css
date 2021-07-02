@@ -28,6 +28,20 @@
   color: #61dafb;
 }
 
+.page-link{
+  border: 1px solid #61dafb !important;
+  border-radius: 2px !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+  transition: all .2s ease;
+}
+.page-link:hover{
+  background: #61dafb !important;
+  color: #fff !important;
+}
+.tableHead{
+  justify-content: space-between;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

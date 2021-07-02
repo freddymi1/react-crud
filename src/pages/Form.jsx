@@ -2,6 +2,7 @@ import React from 'react';
 import {Input} from 'antd';
 export default function Form({
     handleSubmit, 
+    handleCancel,
     name, 
     lastname,
     dateBirth,
@@ -110,7 +111,7 @@ export default function Form({
                 </div>
                 <div>
                     <button className="btn btn-primary mt-1">Validez</button>
-                    <button className="btn btn-danger mt-1">Annuler</button>
+                    <button onClick={handleCancel} className="btn btn-danger mt-1">Annuler</button>
                 </div>
             </form>
         </div>

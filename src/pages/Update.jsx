@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import {toast} from 'react-toastify'
 import { updateTech, getOnTech } from '../services/api'
 // import Form from './Form';
+import {Link} from "react-router-dom";
 import { Input } from 'antd';
 import Loading from './Loading';
 import Form from './Form';
@@ -67,6 +68,10 @@ export const Update = ({history, match}) => {
                 loading ? <Loading/> : (
                     <>
                     <div className="container pt-4">
+                        <div>
+                            <Link to="/" className="btn btn-primary">Home page</Link>
+                            <h4>Modification de <span className="text-info">{name}</span></h4>
+                        </div>
                         <div className="card mb-4 p-4">
                             <Form
                                 handleSubmit={handleSubmit}
